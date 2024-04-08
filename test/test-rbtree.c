@@ -16,7 +16,6 @@ void test_init(void) {
 #endif
   delete_rbtree(t);
 }
-
 // root node should have proper values and pointers
 void test_insert_single(const key_t key) {
   rbtree *t = new_rbtree();
@@ -368,16 +367,40 @@ void test_find_erase_rand(const size_t n, const unsigned int seed) {
 }
 
 int main(void) {
-  test_init();
-  test_insert_single(1024);
-  test_find_single(512, 1024);
-  test_erase_root(128);
-  test_find_erase_fixed();
-  test_minmax_suite();
-  test_to_array_suite();
-  test_distinct_values();
-  test_duplicate_values();
-  test_multi_instance();
-  test_find_erase_rand(10000, 17);
-  printf("Passed all tests!\n");
+  test_init(); // 트리 초기화 테스트
+  test_insert_single(1024); // 단일 노드 삽입 테스트 (값: 1024)
+  test_find_single(512, 1024); // 단일 노드 탐색 테스트 (탐색 값: 512, 삽입 값: 1024)
+  test_erase_root(128); // 루트 노드 삭제 테스트 (값: 128)
+  test_find_erase_fixed(); // 고정 값에 대한 탐색 및 삭제 테스트
+  test_minmax_suite(); // 최솟값과 최댓값 테스트 스위트
+  test_to_array_suite(); // 트리를 배열로 변환하는 테스트 스위트
+  test_distinct_values(); // 서로 다른 값들에 대한 테스트
+  test_duplicate_values(); // 중복 값들에 대한 테스트
+  test_multi_instance(); // 다중 인스턴스 테스트
+  test_find_erase_rand(10000, 17); // 랜덤 값에 대한 탐색 및 삭제 테스트 (테스트 횟수: 10000, 랜덤 시드: 17)
+  printf("Passed all tests!\n"); // 모든 테스트 통과 메시지 출력
 }
+
+//   test_init(); // 새로운 레드-블랙 트리가 올바르게 초기화되는지 테스트합니다. 루트 노드가 NULL 혹은 센티넬 노드인지 확인합니다.
+
+//   test_insert_single(1024); // 1024라는 값을 가진 단일 노드를 트리에 삽입하는 기능을 테스트합니다. 삽입된 노드가 루트 노드가 되며, 적절한 키 값을 가지고 있는지, 그리고 올바른 초기 포인터 값을 가지고 있는지 확인합니다.
+
+//   test_find_single(512, 1024); // . 1024 값을 가진 노드가 존재하므로, 512 값을 찾으려 할 때 NULL을 반환하는지 확인합니다. 그리고 1024 값을 성공적으로 찾는지 확인합니다.
+
+//   test_erase_root(128); //  128 값을 가진 노드를 루트로 삽입한 후, 그 노드를 삭제하고, 루트 노드가 다시 NULL 혹은 센티넬 노드가 되는지 확인합니다.
+
+//   test_find_erase_fixed(); // 고정된 값 배열에 대해 삽입, 탐색, 삭제를 순차적으로 수행하는 테스트입니다. 각 단계에서 올바른 결과가 나오는지 확인합니다.
+
+//   test_minmax_suite(); // 트리의 최소값과 최대값을 찾는 기능을 테스트합니다. 주어진 배열에서 최소값과 최대값을 올바르게 반환하는지 확인합니다.
+
+//   test_to_array_suite(); // 트리의 모든 요소를 배열로 변환하는 기능을 테스트합니다. 변환된 배열이 트리의 요소를 정확히 반영하는지 확인합니다.
+
+//   test_distinct_values(); // 서로 다른 값을 가진 노드들이 트리에 올바르게 삽입되고 관리되는지 테스트합니다. 트리의 검색 및 색상 속성을 유지하는지 확인합니다.
+
+//   test_duplicate_values(); // 중복 값을 가진 노드들을 삽입했을 때 트리가 올바르게 동작하는지 테스트합니다. 특히 중복 값 처리에 초점을 맞춥니다.
+
+//   test_multi_instance(); // 동시에 여러 인스턴스의 레드-블랙 트리가 서로 영향을 주지 않고 독립적으로 동작하는지 테스트합니다.
+
+//   test_find_erase_rand(10000, 17); // 랜덤하게 생성된 10000개의 값에 대해 삽입, 탐색, 삭제 기능을 테스트합니다. 이는 더 복잡하고 다양한 시나리오에서 트리의 정확성과 안정성을 검증합니다.
+
+//   printf("Passed all tests!\n"); // 위의 모든 테스트를 통과했다면, "Passed all tests!" 메시지를 출력하여 모든 테스트의 성공을 알립니다.
