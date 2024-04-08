@@ -1,3 +1,4 @@
+
 #include "rbtree.h"
 #include <stdlib.h>
 
@@ -76,8 +77,7 @@ node_t *rbtree_insert(rbtree *t, const key_t key)
     p->right = new;
   new->parent = p;
 
-  if (p->color == RBTREE_BLACK)
-    insertion_balance(t, new);
+  insertion_balance(t, new);
 
   return t->root;
 }
@@ -94,6 +94,7 @@ node_t *insertion_balance(rbtree *t, node_t *new)
       {
         new->parent->color = RBTREE_BLACK;
         uncle->color = RBTREE_BLACK;
+        new->parent->parent->color = RBTREE_RED;
         new = uncle->parent;
       }
       else
@@ -115,6 +116,7 @@ node_t *insertion_balance(rbtree *t, node_t *new)
       {
         new->parent->color = RBTREE_BLACK;
         uncle->color = RBTREE_BLACK;
+        new->parent->parent->color = RBTREE_RED;
         new = uncle->parent;
       }
       else
@@ -138,13 +140,10 @@ node_t *left_rotate(rbtree *t, node_t *node)
 {
   node_t *r = node->right;
   node->right = r->left;
+
   if (r->left != t->nil)
-  {
-
     r->left->parent = node;
-
-    r->parent = node->parent;
-  }
+  r->parent = node->parent;
 
   if (node->parent == t->nil)
     t->root = r;
@@ -162,11 +161,10 @@ node_t *right_rotate(rbtree *t, node_t *node)
 {
   node_t *l = node->left;
   node->left = l->right;
+
   if (l->right != t->nil)
-  {
     l->right->parent = node;
-    l->parent = node->parent;
-  }
+  l->parent = node->parent;
 
   if (node->parent == t->nil)
     t->root = l;
@@ -224,7 +222,7 @@ node_t *rbtree_max(const rbtree *t)
 /////////////////////// TODO: implement erase///////////////////////
 void tp(rbtree *t, node_t *node, node_t *node2);
 node_t *find_min(const rbtree *t, node_t *node);
-node_t *erase_balance(rbtree *t, node_t *node);
+void erase_balance(rbtree *t, node_t *node);
 int rbtree_erase(rbtree *t, node_t *node)
 {
   node_t *min_node_son;
@@ -270,18 +268,16 @@ void tp(rbtree *t, node_t *node, node_t *replace)
     node->parent->left = replace;
   else
     node->parent->right = replace;
-  if (replace != t->nil)
-    replace->parent = node->parent;
+  replace->parent = node->parent;
 }
 node_t *find_min(const rbtree *t, node_t *node)
 {
   while (node->left != t->nil)
-  {
     node = node->left;
-  }
+
   return node;
 }
-node_t *erase_balance(rbtree *t, node_t *node)
+void erase_balance(rbtree *t, node_t *node)
 {
   node_t *sibling;
   while (node != t->root && node->color == RBTREE_BLACK)
@@ -350,7 +346,6 @@ node_t *erase_balance(rbtree *t, node_t *node)
     }
   }
   node->color = RBTREE_BLACK;
-  return node;
 }
 
 /////////////////////// TODO: implement to_array///////////////////////
