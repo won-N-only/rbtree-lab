@@ -58,7 +58,6 @@ node_t *rbtree_insert(rbtree *t, const key_t key)
     new->parent = t->nil;
     return new;
   }
-
   node_t *curr = t->root;
   node_t *p;
 
@@ -75,16 +74,17 @@ node_t *rbtree_insert(rbtree *t, const key_t key)
     p->left = new;
   else
     p->right = new;
+
   new->parent = p;
 
   insertion_balance(t, new);
 
   return t->root;
 }
+
 /////////////////////// TODO: implement insert fix-up///////////////////////
 node_t *insertion_balance(rbtree *t, node_t *new)
 {
-
   while (new->parent->color == RBTREE_RED)
   {
     if (new->parent == new->parent->parent->left)
@@ -155,7 +155,7 @@ node_t *left_rotate(rbtree *t, node_t *node)
   r->left = node;
   node->parent = r;
 
-  return r; // r이 이제 노드야
+  return r; 
 }
 node_t *right_rotate(rbtree *t, node_t *node)
 {
@@ -194,28 +194,22 @@ node_t *rbtree_find(const rbtree *t, const key_t key)
     else if (key < node->key)
       node = node->left;
   }
-  return NULL;
+  return (node_t* )NULL;
 }
-
-/////////////////////// TODO: implement find///////////////////////
 node_t *rbtree_min(const rbtree *t)
 {
   node_t *node = t->root;
   while (node->left != t->nil)
-  {
     node = node->left;
-  }
+  
   return node;
 }
-
-/////////////////////// TODO: implement find///////////////////////
 node_t *rbtree_max(const rbtree *t)
 {
   node_t *node = t->root;
   while (node->right != t->nil)
-  {
     node = node->right;
-  }
+  
   return node;
 }
 
@@ -225,9 +219,10 @@ node_t *find_min(const rbtree *t, node_t *node);
 void erase_balance(rbtree *t, node_t *node);
 int rbtree_erase(rbtree *t, node_t *node)
 {
-  node_t *min_node_son;
   node_t *min_node = node;
+  node_t *min_node_son;
   color_t node_color = min_node->color;
+
   if (node->left == t->nil)
   {
     min_node_son = node->right;
@@ -238,26 +233,34 @@ int rbtree_erase(rbtree *t, node_t *node)
     min_node_son = node->left;
     tp(t, node, node->left);
   }
+
   else
   {
     min_node = find_min(t, node->right);
     node_color = min_node->color;
     min_node_son = min_node->right;
+
     if (min_node != node->right)
     {
       tp(t, min_node, min_node->right);
       min_node->right = node->right;
       min_node->right->parent = min_node;
     }
+
     else
       min_node_son->parent = min_node;
+    
     tp(t, node, min_node);
+
     min_node->left = node->left;
     min_node->left->parent = min_node;
     min_node->color = node->color;
   }
   if (node_color == RBTREE_BLACK)
     erase_balance(t, min_node_son);
+//이거안해주면 valgrind에 mem-leak생김- >> 왜 ? 
+  free(node);
+
   return 0;
 }
 void tp(rbtree *t, node_t *node, node_t *replace)
@@ -268,6 +271,7 @@ void tp(rbtree *t, node_t *node, node_t *replace)
     node->parent->left = replace;
   else
     node->parent->right = replace;
+
   replace->parent = node->parent;
 }
 node_t *find_min(const rbtree *t, node_t *node)
@@ -285,31 +289,40 @@ void erase_balance(rbtree *t, node_t *node)
     if (node == node->parent->left)
     {
       sibling = node->parent->right;
+      //case1
       if (sibling->color == RBTREE_RED)
       {
         sibling->color = RBTREE_BLACK;
         node->parent->color = RBTREE_RED;
+
         left_rotate(t, node->parent);
+
         sibling = node->parent->right;
       }
+      //case2
       if (sibling->left->color == RBTREE_BLACK && sibling->right->color == RBTREE_BLACK)
       {
         sibling->color = RBTREE_RED;
         node = node->parent;
       }
       else
-      {
+      {//case3 ->case4모양처럼만드는
         if (sibling->right->color == RBTREE_BLACK)
         {
           sibling->left->color = RBTREE_BLACK;
           sibling->color = RBTREE_RED;
+
           right_rotate(t, sibling);
+
           sibling = node->parent->right;
         }
+        //case4
         sibling->color = node->parent->color;
         node->parent->color = RBTREE_BLACK;
         sibling->right->color = RBTREE_BLACK;
+
         left_rotate(t, node->parent);
+
         node = t->root;
       }
     }
@@ -320,7 +333,9 @@ void erase_balance(rbtree *t, node_t *node)
       {
         sibling->color = RBTREE_BLACK;
         node->parent->color = RBTREE_RED;
+
         right_rotate(t, node->parent);
+
         sibling = node->parent->left;
       }
       if (sibling->right->color == RBTREE_BLACK && sibling->left->color == RBTREE_BLACK)
@@ -334,13 +349,17 @@ void erase_balance(rbtree *t, node_t *node)
         {
           sibling->right->color = RBTREE_BLACK;
           sibling->color = RBTREE_RED;
+
           left_rotate(t, sibling);
+
           sibling = node->parent->left;
         }
         sibling->color = node->parent->color;
         node->parent->color = RBTREE_BLACK;
         sibling->left->color = RBTREE_BLACK;
+
         right_rotate(t, node->parent);
+
         node = t->root;
       }
     }
@@ -367,7 +386,9 @@ void inorder(const rbtree *t, node_t *node, key_t *arr, int *cnt)
     return;
 
   inorder(t, node->left, arr, cnt);
+
   arr[*cnt] = node->key;
-  (*cnt)++;
+  (*cnt)+=1;
+
   inorder(t, node->right, arr, cnt);
 }

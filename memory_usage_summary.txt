@@ -1,0 +1,26 @@
+1st try --
+HEAP SUMMARY:
+    in use at exit: 640,992 bytes in 20,031 blocks
+  total heap usage: 20,123 allocs, 92 frees, 684,740 bytes allocated
+
+HEAP SUMMARY: 프로그램이 종료될 때, 할당된 힙 메모리에 대한 요약입니다. 종료 시점에서 640,992 바이트의 메모리가 20,031 개의 블록에 사용되었음을 나타냅니다. 또한 총 20,123 번의 메모리 할당이 이루어졌고, 92 번의 메모리 해제가 있었습니다.
+
+
+LEAK SUMMARY:
+   definitely lost: 401,792 bytes in 12,556 blocks
+   indirectly lost: 239,200 bytes in 7,475 blocks
+     possibly lost: 0 bytes in 0 blocks
+   still reachable: 0 bytes in 0 blocks
+        suppressed: 0 bytes in 0 blocks
+
+LEAK SUMMARY: 메모리 누수에 대한 요약입니다. "definitely lost"는 프로그램이 직접적으로 해제하지 않은 메모리입니다. "indirectly lost"는 누수된 메모리에 대한 포인터가 존재하지 않는 경우입니다. "possibly lost"는 추적할 수 없는 메모리 누수를 나타냅니다. "still reachable"는 여전히 사용 가능한 메모리를 나타냅니다. 이 경우에는 어떠한 메모리 누수도 발생하지 않았습니다.
+
+2nd try --
+==26022== HEAP SUMMARY:
+==26022==     in use at exit: 0 bytes in 0 blocks
+==26022==   total heap usage: 20,123 allocs, 20,123 frees, 684,740 bytes allocated
+==26022== 
+==26022== All heap blocks were freed -- no leaks are possible
+==26022== 
+==26022== For lists of detected and suppressed errors, rerun with: -s
+==26022== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
