@@ -225,7 +225,6 @@ node_t *rbtree_max(const rbtree *t)
 void tp(rbtree *t, node_t *node, node_t *node2);
 node_t *find_min(const rbtree *t, node_t *node);
 node_t *erase_balance(rbtree *t, node_t *node);
-
 int rbtree_erase(rbtree *t, node_t *node)
 {
   node_t *min_node_son;
